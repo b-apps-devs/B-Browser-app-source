@@ -1,41 +1,81 @@
 {
   "name": "b-browser",
-  "productName": "B-Browser",
   "version": "1.0.0",
-  "description": "B-Browser desktop app",
+  "description": "Modern Browser",
+  "author": "DevBlzAlphaK1dXD",
   "main": "main.js",
-  "private": true,
+  "license": "MIT",
+
   "scripts": {
     "start": "electron .",
-    "dist": "electron-builder --win"
+    "dev": "electron .",
+    "build": "electron-builder",
+    "dist": "electron-builder --win",
+    "portable": "electron-builder --win portable"
   },
-  "devDependencies": {
-    "electron": "^31.0.0",
-    "electron-builder": "^24.13.3"
-  },
+
   "build": {
-    "appId": "com.bbrowser.app",
+    "appId": "com.devblzalpha.bbrowser",
     "productName": "B-Browser",
+    "artifactName": "${productName}-${version}.${ext}",
+
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+
     "files": [
-      "index.html",
-      "main.js",
-      "preload.js",
-      "assets/**/*"
+      "**/*",
+      "!dist/**/*",
+      "!node_modules/.cache/**/*",
+      "!*.log"
     ],
+
+    "extraResources": [],
+
+    "asar": true,
+
+    "compression": "maximum",
+
+    "copyright": "© 2026 DevBlzAlphaK1dXD",
+
     "win": {
-      "icon": "assets/icon.ico",
       "target": [
-        { "target": "portable", "arch": ["x64"] },
-        { "target": "nsis", "arch": ["x64"] }
-      ]
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+
+      "icon": "build/icon.ico"
     },
+
     "portable": {
-      "artifactName": "B-Browser-portable.exe"
+      "artifactName": "B-Browser-Portable.exe"
     },
+
     "nsis": {
-      "artifactName": "B-Browser-Setup.exe",
       "oneClick": false,
-      "allowToChangeInstallationDirectory": true
+      "allowToChangeInstallationDirectory": true,
+      "allowElevation": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "B-Browser",
+      "runAfterFinish": true,
+      "deleteAppDataOnUninstall": false
     }
+  },
+
+  "devDependencies": {
+    "electron": "^38.0.0",
+    "electron-builder": "^26.0.12"
   }
 }
