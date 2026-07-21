@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>[EARLY ACCESS]B-Browser Tester(DevBeta)</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
+    <style>
+        /* ── Reset & Base ── */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background:
+                radial-gradient(circle at top, #2563eb55, transparent 35%),
+                radial-gradient(circle at bottom, #7c3aed55, transparent 40%),
+                #050816;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+        }
+
+        /* ── Grid overlay ── */
+        body::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(255, 255, 255, .04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, .04) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: grid 15s linear infinite;
+            opacity: .4;
+        }
+
+        @keyframes grid {
+            0% {
+                transform: translateY(0);
+            }
+            100% {
+                transform: translateY(60px);
+            }
+        }
+
+        /* ── Blur orbs ── */
+        .blur {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            filter: blur(130px);
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .blur:nth-child(1) {
+            background: #2563eb;
+            left: -150px;
+            top: -100px;
+        }
+
+        .blur:nth-child(2) {
+            background: #7c3aed;
+            right: -180px;
+            bottom: -120px;
+            animation-delay: 2s;
+        }
+
+        @keyframes float {
+            50% {
+                transform: translateY(-30px) scale(1.08);
+            }
+        }
+
+        /* ── Card ── */
+        .card {
+            position: relative;
+            width: min(760px, 92%);
+            background: rgba(255, 255, 255, .08);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, .15);
+            border-radius: 35px;
+            padding: 55px;
+            text-align: center;
+            box-shadow:
+                0 30px 70px rgba(0, 0, 0, .45),
+                0 0 120px rgba(37, 99, 235, .2);
+            animation: appear .8s ease;
+            z-index: 10;
+        }
+
+        @keyframes appear {
+            from {
+                opacity: 0;
+                transform: translateY(40px) scale(.94);
+            }
+            to {
+                opacity: 1;
+                transform: none;
+            }
+        }
+
+        .logo {
+            width: 120px;
+            height: 120px;
+            margin: auto;
+            border-radius: 30px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 52px;
+            font-weight: 800;
+            box-shadow: 0 0 60px rgba(59, 130, 246, .6);
+            margin-bottom: 28px;
+            animation: pulse 3s infinite;
+        }
+
+        @keyframes pulse {
+            50% {
+                transform: scale(1.08);
+                box-shadow: 0 0 100px rgba(59, 130, 246, .9);
+            }
+        }
+
+        h1 {
+            font-size: 52px;
+            font-weight: 800;
+            margin-bottom: 12px;
+            background: linear-gradient(90deg, #fff, #60a5fa, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        p {
+            font-size: 18px;
+            line-height: 1.8;
+            color: #cbd5e1;
+            margin-bottom: 38px;
+        }
+
+        .download {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px 42px;
+            font-size: 20px;
+            font-weight: 700;
+            text-decoration: none;
+            color: white;
+            border-radius: 18px;
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
+            box-shadow: 0 20px 40px rgba(37, 99, 235, .4);
+            transition: .35s;
+        }
+
+        .download:hover {
+            transform: translateY(-6px) scale(1.04);
+            box-shadow: 0 25px 60px rgba(37, 99, 235, .7);
+        }
+
+        .note {
+            margin-top: 32px;
+            font-size: 14px;
+            color: #94a3b8;
+        }
+
+        .status {
+            margin-top: 18px;
+            display: inline-flex;
+            gap: 10px;
+            padding: 12px 18px;
+            border-radius: 100px;
+            background: rgba(255, 255, 255, .08);
+            border: 1px solid rgba(255, 255, 255, .08);
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #22c55e;
+            box-shadow: 0 0 15px #22c55e;
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+            50% {
+                opacity: .35;
+            }
+        }
+
+        /* ── Footer ── */
+        .footer {
+            margin-top: 45px;
+            font-size: 13px;
+            color: #64748b;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 6px 18px;
+        }
+
+        .footer .credit-link {
+            color: #94a3b8;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color .3s, text-shadow .3s;
+            border-bottom: 1px solid transparent;
+            padding-bottom: 1px;
+        }
+
+        .footer .credit-link:hover {
+            color: #a78bfa;
+            text-shadow: 0 0 20px rgba(167, 139, 250, .5);
+            border-bottom-color: #a78bfa;
+        }
+
+        .footer .sep {
+            color: #475569;
+            user-select: none;
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 600px) {
+            .card {
+                padding: 35px 22px;
+            }
+            h1 {
+                font-size: 34px;
+            }
+            .logo {
+                width: 90px;
+                height: 90px;
+                font-size: 40px;
+            }
+            .download {
+                padding: 16px 30px;
+                font-size: 17px;
+            }
+            .footer {
+                flex-direction: column;
+                gap: 4px;
+            }
+            .footer .sep {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Background orbs -->
+    <div class="blur"></div>
+    <div class="blur"></div>
+
+    <!-- Main card -->
+    <div class="card">
+
+        <div class="logo">B</div>
+
+        <h1>B-Browser Tester</h1>
+
+        <p>
+            Thank you for participating in the testing program.<br />
+            Download the latest Windows build below and help improve the next version of B-Browser.
+        </p>
+
+        <a class="download"
+        href="https://www.mediafire.com/file/gx7t0jhfoetdo4s/B-Browser.exe/file"
+        target="_blank">
+        [EARLY ACCESS]Get file!
+    </a>
+
+    <div class="status">
+        <div class="dot"></div>
+        <span>Latest Build Available</span>
+    </div>
+
+    <div class="note">
+        Windows 10 / Windows 11 • Latest Test Build
+    </div>
+
+    <!-- Footer with credit link -->
+    <div class="footer">
+        <span>© 2026 B-Browser Development</span>
+        <span class="sep">•</span>
+        <a class="credit-link"
+        href="https://www.tiktok.com/@dbakd_01"
+        target="_blank"
+        rel="noopener noreferrer">
+        DevBlzAlphaK1dXD
+    </a>
+</div>
+
+</div>
+
+</body>
+</html>
