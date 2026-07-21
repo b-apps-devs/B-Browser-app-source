@@ -4,6 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>B-Browser</title>
+    <!-- Favicon from asset folder -->
+    <link rel="icon" type="image/png" href="asset/icon.png" />
+    <link rel="icon" type="image/x-icon" href="asset/icon.ico" />
     <style>
         /* ─── Reset & Root ─── */
         * {
@@ -26,6 +29,7 @@
             --amber: #febc2e;
             --green: #28c840;
             --radius: 14px;
+            --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
         }
         html,
         body {
@@ -34,7 +38,7 @@
         }
         body {
             background: #000;
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            font-family: var(--font);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -92,6 +96,7 @@
         .traffic button:hover {
             filter: brightness(1.2);
         }
+
         .tabs {
             flex: 1;
             display: flex;
@@ -188,7 +193,7 @@
             margin-left: 4px;
         }
         .brand img {
-            height: 14px;
+            height: 18px;
             width: auto;
             display: block;
         }
@@ -387,21 +392,63 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 16px;
+            gap: 20px;
             background: linear-gradient(180deg, #fafafa, #f1f1f2);
+            padding: 20px;
         }
         .newtab.active {
             display: flex;
         }
-        .newtab .nb-mark {
-            width: 56px;
+        .newtab .nb-logo {
+            max-width: 200px;
             height: auto;
         }
-        .newtab p {
-            color: #8a8d93;
-            font-size: 13.5px;
-            margin: 0;
+        .newtab .search-container {
+            display: flex;
+            align-items: center;
+            background: #fff;
+            border-radius: 999px;
+            padding: 0 16px;
+            width: min(80%, 500px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.2s;
         }
+        .newtab .search-container:focus-within {
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+        }
+        .newtab #newtab-search {
+            flex: 1;
+            border: none;
+            outline: none;
+            padding: 12px 8px;
+            font-size: 16px;
+            background: transparent;
+            color: #1a1a1a;
+        }
+        .newtab #newtab-search::placeholder {
+            color: #aaa;
+        }
+        .newtab .search-btn {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 8px 4px 8px 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #555;
+            transition: color 0.2s;
+        }
+        .newtab .search-btn:hover {
+            color: #000;
+        }
+        .newtab .search-btn svg {
+            display: block;
+            stroke: currentColor;
+            stroke-width: 2;
+            fill: none;
+        }
+
         .fallback {
             position: absolute;
             bottom: 14px;
@@ -598,9 +645,18 @@
             font-weight: 700;
         }
         .su-logo {
-            width: min(340px, 70vw);
-            height: auto;
+            display: inline-block;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            overflow: hidden;
             margin: 0 0 34px;
+            background: #111214;
+        }
+        .su-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
         .su-btn {
             background: #111214;
@@ -953,6 +1009,11 @@
             margin-top: 6px;
         }
 
+        /* ─── Language labels ─── */
+        [data-i18n] {
+            transition: opacity .2s;
+        }
+
         /* ─── Responsive ─── */
         @media (max-width: 900px) {
             .settings-window {
@@ -1030,6 +1091,12 @@
                 height: 26px;
                 font-size: 12px;
             }
+            .newtab .search-container {
+                width: 90%;
+            }
+            .newtab #newtab-search {
+                font-size: 14px;
+            }
         }
     </style>
 </head>
@@ -1049,25 +1116,25 @@
                 <div class="su-body">
 
                     <div class="su-screen active" data-screen="1">
-                        <p class="su-eyebrow">Welcome to</p>
-                        <img class="su-logo" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJ8AAADMCAYAAABtAXG5AAAT/klEQVR4nO2deWyc5ZnAf++M7XHimNwhd0JzkkMJN0rDUcrVUpaWchVV2kVdFmW1wGq1f1VCq62W3VVYKi3qqkF[...]
-                        <div><button class="su-btn" id="btnStart">Setup</button></div>
+                        <p class="su-eyebrow" data-i18n="welcome_to">Welcome to</p>
+                        <div class="su-logo"><img src="asset/icon.png" alt="B-Browser" /></div>
+                        <div><button class="su-btn" id="btnStart" data-i18n="setup_btn">Setup</button></div>
                     </div>
 
                     <div class="su-screen" data-screen="2">
-                        <h1>Choose your search engine</h1>
+                        <h1 data-i18n="choose_engine">Choose your search engine</h1>
                         <div class="engine-list" id="engineList"></div>
                         <div style="margin-top:24px;">
-                            <button class="su-btn" id="btnEngineDone">Continue</button>
+                            <button class="su-btn" id="btnEngineDone" data-i18n="continue_btn">Continue</button>
                         </div>
                     </div>
 
                     <div class="su-screen" data-screen="3">
-                        <h1>Login / Register</h1>
+                        <h1 data-i18n="login_title">Login / Register</h1>
                         <div class="account-stack" id="accountStack">
-                            <button class="account-btn" data-mode="register">Register</button>
-                            <button class="account-btn" data-mode="login">Login</button>
-                            <button class="account-btn" id="btnSkip">Skip</button>
+                            <button class="account-btn" data-mode="register" data-i18n="register_btn">Register</button>
+                            <button class="account-btn" data-mode="login" data-i18n="login_btn">Login</button>
+                            <button class="account-btn" id="btnSkip" data-i18n="skip_btn">Skip</button>
                         </div>
                     </div>
 
@@ -1083,8 +1150,7 @@
                 </div>
                 <div class="tabs" id="tabs"></div>
                 <button class="tab-add" id="addTab" title="New tab">+</button>
-                <div class="brand"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJ8AAADMCAYAAABtAXG5AAAT/klEQVR4nO2deWyc5ZnAf++M7XHimNwhd0JzkkMJN0rDUcrVUpaWchVV2kVdFmW1wGq1f1VCq62W3VVYKi3qqkF[...]
-                </div>
+                <div class="brand"><img src="asset/icon.png" alt="B" /></div>
             </div>
 
             <div class="toolbar">
@@ -1093,14 +1159,14 @@
                 <button class="nav-btn" id="btnReload" title="Reload">⟳</button>
                 <div class="address-wrap">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
-                    <input id="address" placeholder="Search or enter url" autocomplete="off" spellcheck="false"/>
-                    <button class="star-btn" id="btnStar" title="Bookmark this page">★</button>
+                    <input id="address" placeholder="Search or enter url" autocomplete="off" spellcheck="false" data-i18n-placeholder="address_placeholder"/>
+                    <button class="star-btn" id="btnStar" title="Bookmark">★</button>
                 </div>
-                <button class="ext-btn" id="btnAccount">Account</button>
+                <button class="ext-btn" id="btnAccount" data-i18n="account_btn">Account</button>
                 <div class="acct-dropdown" id="acctDropdown">
                     <div class="acct-stack" id="acctStack">
-                        <button class="account-btn" data-mode="signin">Sign in</button>
-                        <button class="account-btn" data-mode="register">Create account</button>
+                        <button class="account-btn" data-mode="signin" data-i18n="signin_btn">Sign in</button>
+                        <button class="account-btn" data-mode="register" data-i18n="create_account_btn">Create account</button>
                     </div>
                 </div>
             </div>
@@ -1112,8 +1178,8 @@
                 </div>
                 <div class="content" id="content">
                     <div class="fallback" id="fallback">
-                        <span>Site may refuse to load in-page.</span>
-                        <a id="fallbackLink" href="#" target="_blank" rel="noopener">Open directly ↗</a>
+                        <span data-i18n="fallback_msg">Site may refuse to load in-page.</span>
+                        <a id="fallbackLink" href="#" target="_blank" rel="noopener" data-i18n="open_directly">Open directly ↗</a>
                         <button id="fallbackClose">✕</button>
                     </div>
                 </div>
@@ -1123,22 +1189,22 @@
             <div class="settings-modal" id="settingsModal">
                 <div class="settings-window">
                     <div class="settings-titlebar">
-                        <span>⚙ Settings</span>
+                        <span data-i18n="settings_title">⚙ Settings</span>
                         <button id="settingsCloseBtn" title="Close">✕</button>
                     </div>
                     <div class="settings-body">
                         <div class="settings-sidebar">
-                            <button class="settings-tab active" data-tab="general">General</button>
-                            <button class="settings-tab" data-tab="search">Search Engine</button>
-                            <button class="settings-tab" data-tab="bookmarks">Bookmarks</button>
-                            <button class="settings-tab" data-tab="privacy">Privacy</button>
+                            <button class="settings-tab active" data-tab="general" data-i18n="settings_general">General</button>
+                            <button class="settings-tab" data-tab="search" data-i18n="settings_search">Search Engine</button>
+                            <button class="settings-tab" data-tab="bookmarks" data-i18n="settings_bookmarks">Bookmarks</button>
+                            <button class="settings-tab" data-tab="privacy" data-i18n="settings_privacy">Privacy</button>
                         </div>
                         <div class="settings-content" id="settingsContent">
                             <!-- General -->
                             <div class="settings-tab-panel" data-panel="general">
-                                <h2>General</h2>
+                                <h2 data-i18n="settings_general_title">General</h2>
                                 <label class="setting-row">
-                                    <span>Language</span>
+                                    <span data-i18n="settings_language">Language</span>
                                     <select id="languageSelect">
                                         <option value="en-US">English (US)</option>
                                         <option value="en-GB">English (UK)</option>
@@ -1153,38 +1219,38 @@
                                     </select>
                                 </label>
                                 <label class="setting-row">
-                                    <span>Theme</span>
+                                    <span data-i18n="settings_theme">Theme</span>
                                     <select id="themeSelect">
-                                        <option value="system">System</option>
-                                        <option value="dark">Dark</option>
-                                        <option value="light">Light</option>
+                                        <option value="system" data-i18n="theme_system">System</option>
+                                        <option value="dark" data-i18n="theme_dark">Dark</option>
+                                        <option value="light" data-i18n="theme_light">Light</option>
                                     </select>
                                 </label>
                                 <label class="setting-row">
-                                    <span>Zoom: <span id="zoomLabel">100%</span></span>
+                                    <span data-i18n="settings_zoom">Zoom: <span id="zoomLabel">100%</span></span>
                                     <input id="zoomRange" type="range" min="50" max="200" value="100" />
                                 </label>
                             </div>
 
                             <!-- Search Engine -->
                             <div class="settings-tab-panel" data-panel="search" style="display:none;">
-                                <h2>Search Engine</h2>
+                                <h2 data-i18n="settings_search_title">Search Engine</h2>
                                 <div id="settingsEngineList" class="settings-engine-list"></div>
                             </div>
 
                             <!-- Bookmarks -->
                             <div class="settings-tab-panel" data-panel="bookmarks" style="display:none;">
-                                <h2>Bookmarks</h2>
-                                <p style="color:var(--muted);margin-bottom:16px;">Manage your saved bookmarks.</p>
-                                <button class="settings-danger" id="btnClearBookmarks">Clear All Bookmarks</button>
+                                <h2 data-i18n="settings_bookmarks_title">Bookmarks</h2>
+                                <p style="color:var(--muted);margin-bottom:16px;" data-i18n="bookmarks_desc">Manage your saved bookmarks.</p>
+                                <button class="settings-danger" id="btnClearBookmarks" data-i18n="clear_bookmarks_btn">Clear All Bookmarks</button>
                             </div>
 
                             <!-- Privacy -->
                             <div class="settings-tab-panel" data-panel="privacy" style="display:none;">
-                                <h2>Privacy</h2>
+                                <h2 data-i18n="settings_privacy_title">Privacy</h2>
                                 <label class="setting-row">
-                                    <span>Clear browsing data</span>
-                                    <button class="settings-danger" id="btnClearData" style="width:auto;padding:10px 20px;">Clear History &amp; Cache</button>
+                                    <span data-i18n="clear_data_label">Clear browsing data</span>
+                                    <button class="settings-danger" id="btnClearData" style="width:auto;padding:10px 20px;" data-i18n="clear_data_btn">Clear History &amp; Cache</button>
                                 </label>
                             </div>
                         </div>
@@ -1198,6 +1264,406 @@
     <script>
         (function() {
             "use strict";
+
+            /* ─── TRANSLATIONS ─── */
+            var TRANSLATIONS = {
+                "en-US": {
+                    welcome_to: "Welcome to",
+                    setup_btn: "Setup",
+                    choose_engine: "Choose your search engine",
+                    continue_btn: "Continue",
+                    login_title: "Login / Register",
+                    register_btn: "Register",
+                    login_btn: "Login",
+                    skip_btn: "Skip",
+                    address_placeholder: "Search or enter url",
+                    account_btn: "Account",
+                    signin_btn: "Sign in",
+                    create_account_btn: "Create account",
+                    fallback_msg: "Site may refuse to load in-page.",
+                    open_directly: "Open directly ↗",
+                    settings_title: "⚙ Settings",
+                    settings_general: "General",
+                    settings_search: "Search Engine",
+                    settings_bookmarks: "Bookmarks",
+                    settings_privacy: "Privacy",
+                    settings_general_title: "General",
+                    settings_language: "Language",
+                    settings_theme: "Theme",
+                    theme_system: "System",
+                    theme_dark: "Dark",
+                    theme_light: "Light",
+                    settings_zoom: "Zoom",
+                    settings_search_title: "Search Engine",
+                    settings_bookmarks_title: "Bookmarks",
+                    bookmarks_desc: "Manage your saved bookmarks.",
+                    clear_bookmarks_btn: "Clear All Bookmarks",
+                    settings_privacy_title: "Privacy",
+                    clear_data_label: "Clear browsing data",
+                    clear_data_btn: "Clear History & Cache",
+                    new_tab: "New tab",
+                    start_browsing: "Start browsing"
+                },
+                "en-GB": {
+                    welcome_to: "Welcome to",
+                    setup_btn: "Setup",
+                    choose_engine: "Choose your search engine",
+                    continue_btn: "Continue",
+                    login_title: "Login / Register",
+                    register_btn: "Register",
+                    login_btn: "Login",
+                    skip_btn: "Skip",
+                    address_placeholder: "Search or enter url",
+                    account_btn: "Account",
+                    signin_btn: "Sign in",
+                    create_account_btn: "Create account",
+                    fallback_msg: "Site may refuse to load in-page.",
+                    open_directly: "Open directly ↗",
+                    settings_title: "⚙ Settings",
+                    settings_general: "General",
+                    settings_search: "Search Engine",
+                    settings_bookmarks: "Bookmarks",
+                    settings_privacy: "Privacy",
+                    settings_general_title: "General",
+                    settings_language: "Language",
+                    settings_theme: "Theme",
+                    theme_system: "System",
+                    theme_dark: "Dark",
+                    theme_light: "Light",
+                    settings_zoom: "Zoom",
+                    settings_search_title: "Search Engine",
+                    settings_bookmarks_title: "Bookmarks",
+                    bookmarks_desc: "Manage your saved bookmarks.",
+                    clear_bookmarks_btn: "Clear All Bookmarks",
+                    settings_privacy_title: "Privacy",
+                    clear_data_label: "Clear browsing data",
+                    clear_data_btn: "Clear History & Cache",
+                    new_tab: "New tab",
+                    start_browsing: "Start browsing"
+                },
+                "vi-VN": {
+                    welcome_to: "Chào mừng đến với",
+                    setup_btn: "Cài đặt",
+                    choose_engine: "Chọn công cụ tìm kiếm",
+                    continue_btn: "Tiếp tục",
+                    login_title: "Đăng nhập / Đăng ký",
+                    register_btn: "Đăng ký",
+                    login_btn: "Đăng nhập",
+                    skip_btn: "Bỏ qua",
+                    address_placeholder: "Tìm kiếm hoặc nhập URL",
+                    account_btn: "Tài khoản",
+                    signin_btn: "Đăng nhập",
+                    create_account_btn: "Tạo tài khoản",
+                    fallback_msg: "Trang web có thể từ chối tải.",
+                    open_directly: "Mở trực tiếp ↗",
+                    settings_title: "⚙ Cài đặt",
+                    settings_general: "Tổng quan",
+                    settings_search: "Công cụ tìm kiếm",
+                    settings_bookmarks: "Dấu trang",
+                    settings_privacy: "Quyền riêng tư",
+                    settings_general_title: "Tổng quan",
+                    settings_language: "Ngôn ngữ",
+                    settings_theme: "Giao diện",
+                    theme_system: "Hệ thống",
+                    theme_dark: "Tối",
+                    theme_light: "Sáng",
+                    settings_zoom: "Thu phóng",
+                    settings_search_title: "Công cụ tìm kiếm",
+                    settings_bookmarks_title: "Dấu trang",
+                    bookmarks_desc: "Quản lý dấu trang của bạn.",
+                    clear_bookmarks_btn: "Xóa tất cả dấu trang",
+                    settings_privacy_title: "Quyền riêng tư",
+                    clear_data_label: "Xóa dữ liệu duyệt web",
+                    clear_data_btn: "Xóa lịch sử & bộ nhớ cache",
+                    new_tab: "Tab mới",
+                    start_browsing: "Bắt đầu duyệt web"
+                },
+                "ja-JP": {
+                    welcome_to: "ようこそ",
+                    setup_btn: "セットアップ",
+                    choose_engine: "検索エンジンを選択",
+                    continue_btn: "続ける",
+                    login_title: "ログイン / 登録",
+                    register_btn: "登録",
+                    login_btn: "ログイン",
+                    skip_btn: "スキップ",
+                    address_placeholder: "検索またはURLを入力",
+                    account_btn: "アカウント",
+                    signin_btn: "サインイン",
+                    create_account_btn: "アカウント作成",
+                    fallback_msg: "サイトが読み込まれない可能性があります。",
+                    open_directly: "直接開く ↗",
+                    settings_title: "⚙ 設定",
+                    settings_general: "一般",
+                    settings_search: "検索エンジン",
+                    settings_bookmarks: "ブックマーク",
+                    settings_privacy: "プライバシー",
+                    settings_general_title: "一般",
+                    settings_language: "言語",
+                    settings_theme: "テーマ",
+                    theme_system: "システム",
+                    theme_dark: "ダーク",
+                    theme_light: "ライト",
+                    settings_zoom: "ズーム",
+                    settings_search_title: "検索エンジン",
+                    settings_bookmarks_title: "ブックマーク",
+                    bookmarks_desc: "ブックマークを管理します。",
+                    clear_bookmarks_btn: "すべてのブックマークを削除",
+                    settings_privacy_title: "プライバシー",
+                    clear_data_label: "ブラウジングデータを削除",
+                    clear_data_btn: "履歴とキャッシュを削除",
+                    new_tab: "新規タブ",
+                    start_browsing: "ブラウジングを開始"
+                },
+                "ko-KR": {
+                    welcome_to: "환영합니다",
+                    setup_btn: "설정",
+                    choose_engine: "검색 엔진 선택",
+                    continue_btn: "계속",
+                    login_title: "로그인 / 회원가입",
+                    register_btn: "회원가입",
+                    login_btn: "로그인",
+                    skip_btn: "건너뛰기",
+                    address_placeholder: "검색 또는 URL 입력",
+                    account_btn: "계정",
+                    signin_btn: "로그인",
+                    create_account_btn: "계정 만들기",
+                    fallback_msg: "사이트가 로드되지 않을 수 있습니다.",
+                    open_directly: "직접 열기 ↗",
+                    settings_title: "⚙ 설정",
+                    settings_general: "일반",
+                    settings_search: "검색 엔진",
+                    settings_bookmarks: "북마크",
+                    settings_privacy: "개인정보",
+                    settings_general_title: "일반",
+                    settings_language: "언어",
+                    settings_theme: "테마",
+                    theme_system: "시스템",
+                    theme_dark: "다크",
+                    theme_light: "라이트",
+                    settings_zoom: "확대/축소",
+                    settings_search_title: "검색 엔진",
+                    settings_bookmarks_title: "북마크",
+                    bookmarks_desc: "북마크를 관리하세요.",
+                    clear_bookmarks_btn: "모든 북마크 삭제",
+                    settings_privacy_title: "개인정보",
+                    clear_data_label: "브라우징 데이터 삭제",
+                    clear_data_btn: "기록 및 캐시 삭제",
+                    new_tab: "새 탭",
+                    start_browsing: "브라우징 시작"
+                },
+                "zh-CN": {
+                    welcome_to: "欢迎使用",
+                    setup_btn: "设置",
+                    choose_engine: "选择搜索引擎",
+                    continue_btn: "继续",
+                    login_title: "登录 / 注册",
+                    register_btn: "注册",
+                    login_btn: "登录",
+                    skip_btn: "跳过",
+                    address_placeholder: "搜索或输入网址",
+                    account_btn: "账户",
+                    signin_btn: "登录",
+                    create_account_btn: "创建账户",
+                    fallback_msg: "网站可能拒绝加载。",
+                    open_directly: "直接打开 ↗",
+                    settings_title: "⚙ 设置",
+                    settings_general: "常规",
+                    settings_search: "搜索引擎",
+                    settings_bookmarks: "书签",
+                    settings_privacy: "隐私",
+                    settings_general_title: "常规",
+                    settings_language: "语言",
+                    settings_theme: "主题",
+                    theme_system: "系统",
+                    theme_dark: "深色",
+                    theme_light: "浅色",
+                    settings_zoom: "缩放",
+                    settings_search_title: "搜索引擎",
+                    settings_bookmarks_title: "书签",
+                    bookmarks_desc: "管理您的书签。",
+                    clear_bookmarks_btn: "清除所有书签",
+                    settings_privacy_title: "隐私",
+                    clear_data_label: "清除浏览数据",
+                    clear_data_btn: "清除历史记录和缓存",
+                    new_tab: "新标签页",
+                    start_browsing: "开始浏览"
+                },
+                "zh-TW": {
+                    welcome_to: "歡迎使用",
+                    setup_btn: "設定",
+                    choose_engine: "選擇搜尋引擎",
+                    continue_btn: "繼續",
+                    login_title: "登入 / 註冊",
+                    register_btn: "註冊",
+                    login_btn: "登入",
+                    skip_btn: "跳過",
+                    address_placeholder: "搜尋或輸入網址",
+                    account_btn: "帳戶",
+                    signin_btn: "登入",
+                    create_account_btn: "建立帳戶",
+                    fallback_msg: "網站可能拒絕載入。",
+                    open_directly: "直接開啟 ↗",
+                    settings_title: "⚙ 設定",
+                    settings_general: "一般",
+                    settings_search: "搜尋引擎",
+                    settings_bookmarks: "書籤",
+                    settings_privacy: "隱私",
+                    settings_general_title: "一般",
+                    settings_language: "語言",
+                    settings_theme: "主題",
+                    theme_system: "系統",
+                    theme_dark: "深色",
+                    theme_light: "淺色",
+                    settings_zoom: "縮放",
+                    settings_search_title: "搜尋引擎",
+                    settings_bookmarks_title: "書籤",
+                    bookmarks_desc: "管理您的書籤。",
+                    clear_bookmarks_btn: "清除所有書籤",
+                    settings_privacy_title: "隱私",
+                    clear_data_label: "清除瀏覽資料",
+                    clear_data_btn: "清除歷史記錄和快取",
+                    new_tab: "新分頁",
+                    start_browsing: "開始瀏覽"
+                },
+                "fr-FR": {
+                    welcome_to: "Bienvenue sur",
+                    setup_btn: "Configuration",
+                    choose_engine: "Choisissez votre moteur de recherche",
+                    continue_btn: "Continuer",
+                    login_title: "Connexion / Inscription",
+                    register_btn: "S'inscrire",
+                    login_btn: "Se connecter",
+                    skip_btn: "Passer",
+                    address_placeholder: "Rechercher ou saisir une URL",
+                    account_btn: "Compte",
+                    signin_btn: "Se connecter",
+                    create_account_btn: "Créer un compte",
+                    fallback_msg: "Le site peut refuser de se charger.",
+                    open_directly: "Ouvrir directement ↗",
+                    settings_title: "⚙ Paramètres",
+                    settings_general: "Général",
+                    settings_search: "Moteur de recherche",
+                    settings_bookmarks: "Favoris",
+                    settings_privacy: "Confidentialité",
+                    settings_general_title: "Général",
+                    settings_language: "Langue",
+                    settings_theme: "Thème",
+                    theme_system: "Système",
+                    theme_dark: "Sombre",
+                    theme_light: "Clair",
+                    settings_zoom: "Zoom",
+                    settings_search_title: "Moteur de recherche",
+                    settings_bookmarks_title: "Favoris",
+                    bookmarks_desc: "Gérez vos favoris.",
+                    clear_bookmarks_btn: "Supprimer tous les favoris",
+                    settings_privacy_title: "Confidentialité",
+                    clear_data_label: "Effacer les données de navigation",
+                    clear_data_btn: "Effacer l'historique et le cache",
+                    new_tab: "Nouvel onglet",
+                    start_browsing: "Commencer à naviguer"
+                },
+                "de-DE": {
+                    welcome_to: "Willkommen bei",
+                    setup_btn: "Einrichtung",
+                    choose_engine: "Wählen Sie Ihre Suchmaschine",
+                    continue_btn: "Weiter",
+                    login_title: "Anmelden / Registrieren",
+                    register_btn: "Registrieren",
+                    login_btn: "Anmelden",
+                    skip_btn: "Überspringen",
+                    address_placeholder: "Suchen oder URL eingeben",
+                    account_btn: "Konto",
+                    signin_btn: "Anmelden",
+                    create_account_btn: "Konto erstellen",
+                    fallback_msg: "Die Site kann das Laden verweigern.",
+                    open_directly: "Direkt öffnen ↗",
+                    settings_title: "⚙ Einstellungen",
+                    settings_general: "Allgemein",
+                    settings_search: "Suchmaschine",
+                    settings_bookmarks: "Lesezeichen",
+                    settings_privacy: "Datenschutz",
+                    settings_general_title: "Allgemein",
+                    settings_language: "Sprache",
+                    settings_theme: "Design",
+                    theme_system: "System",
+                    theme_dark: "Dunkel",
+                    theme_light: "Hell",
+                    settings_zoom: "Zoom",
+                    settings_search_title: "Suchmaschine",
+                    settings_bookmarks_title: "Lesezeichen",
+                    bookmarks_desc: "Verwalten Sie Ihre Lesezeichen.",
+                    clear_bookmarks_btn: "Alle Lesezeichen löschen",
+                    settings_privacy_title: "Datenschutz",
+                    clear_data_label: "Browserdaten löschen",
+                    clear_data_btn: "Verlauf und Cache löschen",
+                    new_tab: "Neuer Tab",
+                    start_browsing: "Mit dem Surfen beginnen"
+                },
+                "es-ES": {
+                    welcome_to: "Bienvenido a",
+                    setup_btn: "Configuración",
+                    choose_engine: "Elige tu motor de búsqueda",
+                    continue_btn: "Continuar",
+                    login_title: "Iniciar sesión / Registrarse",
+                    register_btn: "Registrarse",
+                    login_btn: "Iniciar sesión",
+                    skip_btn: "Saltar",
+                    address_placeholder: "Buscar o introducir URL",
+                    account_btn: "Cuenta",
+                    signin_btn: "Iniciar sesión",
+                    create_account_btn: "Crear cuenta",
+                    fallback_msg: "El sitio puede negarse a cargar.",
+                    open_directly: "Abrir directamente ↗",
+                    settings_title: "⚙ Configuración",
+                    settings_general: "General",
+                    settings_search: "Motor de búsqueda",
+                    settings_bookmarks: "Marcadores",
+                    settings_privacy: "Privacidad",
+                    settings_general_title: "General",
+                    settings_language: "Idioma",
+                    settings_theme: "Tema",
+                    theme_system: "Sistema",
+                    theme_dark: "Oscuro",
+                    theme_light: "Claro",
+                    settings_zoom: "Zoom",
+                    settings_search_title: "Motor de búsqueda",
+                    settings_bookmarks_title: "Marcadores",
+                    bookmarks_desc: "Administra tus marcadores.",
+                    clear_bookmarks_btn: "Borrar todos los marcadores",
+                    settings_privacy_title: "Privacidad",
+                    clear_data_label: "Borrar datos de navegación",
+                    clear_data_btn: "Borrar historial y caché",
+                    new_tab: "Nueva pestaña",
+                    start_browsing: "Comenzar a navegar"
+                }
+            };
+
+            var currentLang = "en-US";
+
+            /* ─── I18n ─── */
+            function i18n(key) {
+                var t = TRANSLATIONS[currentLang];
+                return (t && t[key]) || key;
+            }
+
+            function updateUI() {
+                var els = document.querySelectorAll("[data-i18n]");
+                els.forEach(function(el) {
+                    var key = el.getAttribute("data-i18n");
+                    el.textContent = i18n(key);
+                });
+                var placeholders = document.querySelectorAll("[data-i18n-placeholder]");
+                placeholders.forEach(function(el) {
+                    var key = el.getAttribute("data-i18n-placeholder");
+                    el.placeholder = i18n(key);
+                });
+                // Update new tab search placeholder
+                var searchInputs = document.querySelectorAll("#newtab-search");
+                searchInputs.forEach(function(inp) {
+                    inp.placeholder = i18n("address_placeholder");
+                });
+            }
 
             /* ─── Search Engines ─── */
             var ENGINES = {
@@ -1276,7 +1742,8 @@
             /* ─── Tabs ─── */
             function newTabObj(url) {
                 var id = state.nextId++;
-                return { id: id, url: url || "", title: url ? hostname(url) : "New tab", history: [], histIndex: -1,
+                return { id: id, url: url || "", title: url ? hostname(url) : i18n("new_tab"), history: [],
+                    histIndex: -1,
                     starred: false, iframe: null, node: null, pageEl: null };
             }
 
@@ -1289,6 +1756,7 @@
                     page.className = "";
                     page.setAttribute("referrerpolicy", "no-referrer");
                     page.setAttribute("sandbox", "allow-scripts allow-same-origin allow-forms allow-popups");
+                    page.src = url; /* FIX: iframe src was never being set, so tabs opened via bookmarks/programmatically stayed blank */
                     contentEl.appendChild(page);
                     tab.iframe = page;
                     tab.history.push(url);
@@ -1296,11 +1764,48 @@
                 } else {
                     page = document.createElement("div");
                     page.className = "newtab";
-                    page.innerHTML =
-                        '<img class="nb-mark" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJ8AAADMCAYAAABtAXG5AAAT/klEQVR4nO2deWyc5ZnAf++M7XHimNwhd0JzkkMJN0rDUcrVUpaWchVV2kVdFmW1wGq1f1VCq62W3VVYKi3qqkF[...]
+                    // New design: logo + search bar with classic SVG icon
+                    page.innerHTML = `
+                        <img class="nb-logo" src="asset/B-Browser-logo.png" alt="B-Browser" />
+                        <div class="search-container">
+                            <input id="newtab-search" type="text" placeholder="${i18n('address_placeholder')}" autocomplete="off" />
+                            <button class="search-btn" id="newtab-search-btn">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="11" cy="11" r="7"/>
+                                    <path d="M21 21l-4.3-4.3"/>
+                                </svg>
+                            </button>
+                        </div>
+                    `;
                     contentEl.appendChild(page);
                     tab.iframe = null;
                     tab.node = page;
+
+                    // Attach events for the search bar
+                    var searchInput = page.querySelector("#newtab-search");
+                    var searchBtn = page.querySelector("#newtab-search-btn");
+                    if (searchInput) {
+                        searchInput.addEventListener("keydown", function(e) {
+                            if (e.key === "Enter") {
+                                e.preventDefault();
+                                var query = this.value;
+                                var url = resolveInput(query);
+                                if (url) go(url);
+                            }
+                        });
+                        // Also update placeholder on language change
+                        searchInput.placeholder = i18n("address_placeholder");
+                    }
+                    if (searchBtn) {
+                        searchBtn.addEventListener("click", function() {
+                            var input = this.parentElement.querySelector("#newtab-search");
+                            if (input) {
+                                var query = input.value;
+                                var url = resolveInput(query);
+                                if (url) go(url);
+                            }
+                        });
+                    }
                 }
                 tab.pageEl = page;
                 switchTab(tab.id);
@@ -1373,6 +1878,18 @@
             function go(url) {
                 var tab = findTab(state.activeId);
                 if (!tab) return;
+                if (!tab.iframe) {
+                    /* Currently on the new-tab page: promote it to an iframe tab */
+                    if (tab.pageEl) tab.pageEl.remove();
+                    var page = document.createElement("iframe");
+                    page.setAttribute("referrerpolicy", "no-referrer");
+                    page.setAttribute("sandbox", "allow-scripts allow-same-origin allow-forms allow-popups");
+                    page.className = "active";
+                    contentEl.appendChild(page);
+                    tab.iframe = page;
+                    tab.pageEl = page;
+                    tab.node = null;
+                }
                 if (tab.iframe) {
                     try { tab.iframe.src = url; } catch (e) { /* ignore */ }
                 }
@@ -1389,7 +1906,6 @@
                 renderTabs();
                 addressEl.value = url;
                 updateNavButtons();
-                // push to global history
                 state.history.push({ url: url, time: Date.now() });
             }
 
@@ -1419,7 +1935,6 @@
                 setupEl.style.display = "none";
             }
 
-            // Build engine list in setup
             var engineListEl = $("engineList");
             ENGINE_ORDER.forEach(function(key) {
                 var eng = ENGINES[key];
@@ -1455,13 +1970,12 @@
             /* ─── Settings Modal (pop-up) ─── */
             function openSettings() {
                 settingsModal.classList.add("show");
-                // sync engine selection in settings
                 renderSettingsEngines();
-                // sync zoom label
                 var zoomVal = parseInt($("zoomRange").value, 10);
                 $("zoomLabel").textContent = zoomVal + "%";
-                // set active tab
                 switchSettingsTab(state.settingsTab || "general");
+                var langSelect = $("languageSelect");
+                if (langSelect) langSelect.value = currentLang;
             }
 
             function closeSettings() {
@@ -1482,7 +1996,6 @@
                 if (e.key === "Escape" && settingsModal.classList.contains("show")) closeSettings();
             });
 
-            /* Settings tabs */
             var settingsTabBtns = document.querySelectorAll(".settings-tab");
             settingsTabBtns.forEach(function(btn) {
                 btn.onclick = function() {
@@ -1500,7 +2013,6 @@
                 });
             }
 
-            /* Settings engine list */
             function renderSettingsEngines() {
                 var container = $("settingsEngineList");
                 if (!container) return;
@@ -1518,7 +2030,6 @@
                             e.classList.remove("selected");
                         });
                         this.classList.add("selected");
-                        // also update setup list if visible
                         document.querySelectorAll("#engineList .engine-row").forEach(function(e) {
                             e.classList.remove("selected");
                             if (e.textContent.trim().startsWith(eng.name)) e.classList.add("selected");
@@ -1526,6 +2037,25 @@
                     };
                     container.appendChild(div);
                 });
+            }
+
+            /* ─── Language switching ─── */
+            function setLanguage(lang) {
+                if (TRANSLATIONS[lang]) {
+                    currentLang = lang;
+                    updateUI();
+                    // Update new tab search placeholders
+                    document.querySelectorAll("#newtab-search").forEach(function(inp) {
+                        inp.placeholder = i18n("address_placeholder");
+                    });
+                    // Update tab titles that are "New tab"
+                    state.tabs.forEach(function(tab) {
+                        if (!tab.url || tab.url === "") {
+                            tab.title = i18n("new_tab");
+                        }
+                    });
+                    renderTabs();
+                }
             }
 
             /* ─── Event listeners ─── */
@@ -1536,7 +2066,6 @@
             };
 
             $("tlMin").onclick = function() {
-                // Minimize: request fullscreen or just a visual cue
                 if (document.fullscreenElement) document.exitFullscreen().catch(function() {});
             };
 
@@ -1580,14 +2109,12 @@
                     tab.starred = !tab.starred;
                     this.classList.toggle("active");
                     if (tab.starred) {
-                        // add to bookmarks if not already there
                         var exists = state.bookmarks.some(function(b) { return b.url === tab.url; });
                         if (!exists) {
                             state.bookmarks.push({ title: tab.title || hostname(tab.url) || tab.url, url: tab.url });
                             renderBookmarks();
                         }
                     } else {
-                        // remove from bookmarks
                         state.bookmarks = state.bookmarks.filter(function(b) { return b.url !== tab.url; });
                         renderBookmarks();
                     }
@@ -1595,14 +2122,14 @@
             };
 
             $("btnClearBookmarks").onclick = function() {
-                if (confirm("Clear all bookmarks?")) {
+                if (confirm(i18n("clear_bookmarks_btn") + "?")) {
                     state.bookmarks = [];
                     renderBookmarks();
                 }
             };
 
             $("btnClearData").onclick = function() {
-                if (confirm("Clear all browsing history and cache?")) {
+                if (confirm(i18n("clear_data_btn") + "?")) {
                     state.history = [];
                     state.tabs.forEach(function(tab) {
                         tab.history = [];
@@ -1611,7 +2138,7 @@
                             try { tab.iframe.src = "about:blank"; } catch (e) { /* ignore */ }
                         }
                     });
-                    alert("Browsing data cleared.");
+                    alert(i18n("clear_data_btn") + " " + i18n("settings_privacy_title"));
                 }
             };
 
@@ -1619,7 +2146,6 @@
             $("zoomRange").oninput = function() {
                 var val = this.value;
                 $("zoomLabel").textContent = val + "%";
-                // Apply zoom to content
                 var content = document.querySelector(".content");
                 if (content) {
                     content.style.zoom = (val / 100);
@@ -1661,21 +2187,47 @@
                 }
             };
 
+            /* ─── Language selector in settings ─── */
+            $("languageSelect").onchange = function() {
+                var lang = this.value;
+                setLanguage(lang);
+                if (setupEl.style.display !== "none") {
+                    updateUI();
+                }
+            };
+
             /* ─── Fallback ─── */
             $("fallbackClose").onclick = function() {
                 fallbackEl.classList.remove("show");
             };
 
             /* ─── Init ─── */
+            var browserLang = navigator.language || "en-US";
+            if (TRANSLATIONS[browserLang]) {
+                currentLang = browserLang;
+            } else {
+                var base = browserLang.split("-")[0];
+                var found = false;
+                for (var key in TRANSLATIONS) {
+                    if (key.startsWith(base)) { currentLang = key;
+                        found = true; break; }
+                }
+                if (!found) currentLang = "en-US";
+            }
+
+            updateUI();
+
             createTab(null);
             renderBookmarks();
             renderSettingsEngines();
 
-            // set default theme
             var themeSelect = $("themeSelect");
             if (themeSelect) themeSelect.value = "system";
 
-            console.log("B-Browser ready.");
+            var langSelect = $("languageSelect");
+            if (langSelect) langSelect.value = currentLang;
+
+            console.log("B-Browser ready. Language:", currentLang);
         })();
     </script>
 </body>
