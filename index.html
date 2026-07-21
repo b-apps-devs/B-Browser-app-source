@@ -328,26 +328,404 @@
   .acct-signout:hover{border-color:#5a3030;color:#ff8f87;}
 
   /* ---------- Settings panel (bottom-left) ---------- */
-  .settings-panel{
-    position:absolute;bottom:64px;left:14px;width:250px;background:#1d1f24;
-    border:1px solid var(--line);border-radius:14px;padding:14px;
-    box-shadow:0 16px 40px rgba(0,0,0,.45);display:none;flex-direction:column;gap:12px;z-index:15;
-  }
-  .settings-panel.show{display:flex;}
-  .settings-panel h3{margin:0;font-size:12px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);font-weight:700;}
-  .settings-engine-list{display:flex;flex-direction:column;gap:6px;}
-  .settings-engine-row{
-    display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:9px;
-    background:#26282f;color:var(--ink);font-size:13px;cursor:pointer;border:1.5px solid transparent;
-  }
-  .settings-engine-row:hover{background:#2c2e35;}
-  .settings-engine-row.selected{border-color:var(--accent-dim);}
-  .settings-engine-row .e-icon{width:18px;height:18px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:12px;flex:0 0 auto;}
-  .settings-clear{
-    padding:9px;border-radius:9px;border:1.5px solid #3a3c44;background:transparent;
-    color:var(--muted);font-size:12.5px;cursor:pointer;
-  }
-  .settings-clear:hover{border-color:#5a3030;color:#ff8f87;}
+ /* ---------- Settings panel (bottom-left) ---------- */
+
+.settings-panel{
+    position:absolute;
+    left:64px;
+    bottom:16px;
+    width:320px;
+    max-height:70vh;
+    overflow:auto;
+    background:#1b1c21;
+    border:1px solid #30333b;
+    border-radius:14px;
+    padding:16px;
+    display:none;
+    z-index:1000;
+}
+
+.settings-panel.open{
+    display:block;
+}
+
+.settings-panel h3{
+    margin:0 0 12px;
+    font-size:15px;
+    font-weight:600;
+}
+
+.settings-engine-list{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    margin-bottom:16px;
+}
+
+.settings-clear{
+    width:100%;
+    padding:10px;
+    border-radius:10px;
+    border:1px solid #5a3030;
+    background:#2d1717;
+    color:#ffb3ad;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.settings-clear:hover{
+    border-color:#7d4040;
+    color:#ffffff;
+}
+/* ==========================================
+   Browser Settings Popup
+========================================== */
+
+.settings-modal{
+    position:fixed;
+    inset:0;
+    display:none;
+    justify-content:center;
+    align-items:center;
+    background:rgba(0,0,0,.55);
+    backdrop-filter:blur(8px);
+    z-index:999999;
+}
+
+.settings-modal.show{
+    display:flex;
+}
+
+.settings-window{
+    width:920px;
+    height:650px;
+    background:#1b1c20;
+    border:1px solid #34363d;
+    border-radius:18px;
+    overflow:hidden;
+    box-shadow:0 30px 80px rgba(0,0,0,.45);
+    animation:settingsOpen .18s ease;
+}
+
+@keyframes settingsOpen{
+
+    from{
+        opacity:0;
+        transform:scale(.96);
+    }
+
+    to{
+        opacity:1;
+        transform:scale(1);
+    }
+
+}
+
+.settings-titlebar{
+
+    height:58px;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:0 22px;
+
+    background:#202126;
+
+    border-bottom:1px solid #31333a;
+
+}
+
+.settings-titlebar span{
+
+    font-size:18px;
+    font-weight:600;
+
+}
+
+.settings-titlebar button{
+
+    width:36px;
+    height:36px;
+
+    border:none;
+    border-radius:10px;
+
+    background:transparent;
+
+    color:#fff;
+
+    cursor:pointer;
+
+    transition:.2s;
+
+}
+
+.settings-titlebar button:hover{
+
+    background:#34353b;
+
+}
+
+.settings-body{
+
+    display:flex;
+
+    height:calc(100% - 58px);
+
+}
+
+.settings-sidebar{
+
+    width:220px;
+
+    background:#17181d;
+
+    border-right:1px solid #2d3037;
+
+    padding:18px;
+
+    overflow-y:auto;
+
+}
+
+.settings-tab{
+
+    width:100%;
+
+    padding:12px 14px;
+
+    margin-bottom:8px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:transparent;
+
+    color:#d8d8d8;
+
+    text-align:left;
+
+    cursor:pointer;
+
+    transition:.2s;
+
+    font-size:14px;
+
+}
+
+.settings-tab:hover{
+
+    background:#2b2d34;
+
+}
+
+.settings-tab.active{
+
+    background:#3b82f6;
+
+    color:white;
+
+}
+
+.settings-content{
+
+    flex:1;
+
+    padding:28px;
+
+    overflow:auto;
+
+}
+
+.settings-content h2{
+
+    margin-top:0;
+
+    font-size:26px;
+
+    margin-bottom:22px;
+
+}
+
+.setting-row{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:8px;
+
+    margin-bottom:18px;
+
+}
+
+.setting-row span{
+
+    color:#c7c7c7;
+
+    font-size:13px;
+
+}
+
+.setting-row select,
+.setting-row input{
+
+    width:100%;
+
+    box-sizing:border-box;
+
+    padding:10px 12px;
+
+    border-radius:10px;
+
+    border:1px solid #40434a;
+
+    background:#2a2c33;
+
+    color:white;
+
+    outline:none;
+
+}
+
+.setting-row select:focus,
+.setting-row input:focus{
+
+    border-color:#4f8dff;
+
+}
+
+.settings-content button{
+
+    padding:10px 18px;
+
+    border:none;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+}
+
+.settings-danger{
+
+    background:#4d2020;
+
+    color:#ffd0d0;
+
+}
+
+.settings-danger:hover{
+
+    background:#6d2929;
+
+}
+
+@media(max-width:900px){
+
+.settings-window{
+
+    width:95vw;
+    height:92vh;
+
+}
+
+.settings-sidebar{
+
+    width:180px;
+
+}
+
+}
+
+@media(max-width:650px){
+
+.settings-window{
+
+    width:100vw;
+    height:100vh;
+    border-radius:0;
+
+}
+
+.settings-sidebar{
+
+    width:70px;
+    padding:10px;
+
+}
+
+.settings-tab{
+
+    font-size:11px;
+    padding:10px 6px;
+    text-align:center;
+
+}
+
+.settings-content{
+
+    padding:18px;
+
+}
+
+}
+
+.setting-row{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    margin-bottom:14px;
+}
+
+.setting-row span{
+    font-size:12px;
+    color:#bdbdbd;
+}
+
+.setting-row select,
+.setting-row input[type="range"]{
+    width:100%;
+    padding:8px 10px;
+    border-radius:8px;
+    border:1px solid #3a3c44;
+    background:#26282f;
+    color:#fff;
+    outline:none;
+}
+
+.setting-row select:focus,
+.setting-row input[type="range"]:focus{
+    border-color:#4d8cff;
+}
+
+@media (max-width:640px){
+
+    .sidebar{
+        width:46px;
+    }
+
+    .bm{
+        width:32px;
+        height:32px;
+    }
+
+    .brand{
+        display:none;
+    }
+
+    .ext-btn{
+        display:none;
+    }
+
+    .settings-panel{
+        left:50px;
+        width:260px;
+    }
+}
 
   @media (max-width:640px){
     .sidebar{width:46px;}
@@ -424,7 +802,56 @@
     <div class="sidebar">
       <div class="sidebar-scroll" id="sidebar"></div>
       <button class="bm settings-btn" id="btnSettings" title="Settings">⚙</button>
-      <div class="settings-panel" id="settingsPanel">
+<div class="settings-panel" id="settingsPanel">
+
+    <div>
+        <h3>General</h3>
+
+        <label class="setting-row">
+            <span>Language</span>
+            <select id="languageSelect">
+                <option value="en-US">English (US)</option>
+                <option value="en-GB">English (UK)</option>
+                <option value="vi-VN">Tiếng Việt</option>
+                <option value="ja-JP">日本語</option>
+                <option value="ko-KR">한국어</option>
+                <option value="zh-CN">简体中文</option>
+                <option value="zh-TW">繁體中文</option>
+                <option value="fr-FR">Français</option>
+                <option value="de-DE">Deutsch</option>
+                <option value="es-ES">Español</option>
+            </select>
+        </label>
+
+        <label class="setting-row">
+            <span>Theme</span>
+            <select id="themeSelect">
+                <option value="system">System</option>
+                <option value="dark">Dark</option>
+                <option value="light">Light</option>
+            </select>
+        </label>
+
+        <label class="setting-row">
+            <span>Zoom</span>
+            <input id="zoomRange" type="range" min="50" max="200" value="100">
+        </label>
+
+    </div>
+
+    <div>
+        <h3>Search Engine</h3>
+        <div id="settingsEngineList" class="settings-engine-list"></div>
+    </div>
+
+    <div>
+        <h3>Bookmarks</h3>
+        <button class="settings-clear" id="btnClearBookmarks">
+            Clear All Bookmarks
+        </button>
+    </div>
+
+</div>
         <div>
           <h3>Search engine</h3>
           <div class="settings-engine-list" id="settingsEngineList"></div>
@@ -893,5 +1320,42 @@
   updateNavButtons();
 })();
 </script>
+<div id="settingsModal" class="settings-modal">
+
+    <div class="settings-window">
+
+        <div class="settings-titlebar">
+            <span>⚙ Browser Settings</span>
+            <button id="closeSettings">✕</button>
+        </div>
+
+        <div class="settings-body">
+
+            <div class="settings-sidebar">
+
+                <button class="settings-tab active" data-page="general">General</button>
+                <button class="settings-tab" data-page="appearance">Appearance</button>
+                <button class="settings-tab" data-page="language">Language</button>
+                <button class="settings-tab" data-page="search">Search</button>
+                <button class="settings-tab" data-page="bookmarks">Bookmarks</button>
+                <button class="settings-tab" data-page="downloads">Downloads</button>
+                <button class="settings-tab" data-page="privacy">Privacy</button>
+                <button class="settings-tab" data-page="about">About</button>
+
+            </div>
+
+            <div class="settings-content">
+
+                <div id="generalPage">
+                    <h2>General</h2>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
 </body>
 </html>
