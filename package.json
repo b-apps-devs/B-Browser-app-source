@@ -2,7 +2,7 @@
   "name": "b-browser",
   "productName": "B-Browser",
   "version": "1.0.0",
-  "description": "B-Browser desktop app",
+  "description": "B-Browser - Modern Desktop Web Browser",
   "main": "main.js",
   "private": true,
   "scripts": {
@@ -24,9 +24,11 @@
     ],
     "win": {
       "icon": "assets/icon.ico",
+      "certificateFile": null,
+      "certificatePassword": null,
       "target": [
-        { "target": "portable", "arch": ["x64"] },
-        { "target": "nsis", "arch": ["x64"] }
+        {"target": "portable", "arch": ["x64"]},
+        {"target": "nsis", "arch": ["x64"]}
       ]
     },
     "portable": {
@@ -35,7 +37,10 @@
     "nsis": {
       "artifactName": "B-Browser-Setup.exe",
       "oneClick": false,
-      "allowToChangeInstallationDirectory": true
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "B-Browser"
     }
   }
 }
