@@ -1144,8 +1144,8 @@
             <!-- ===== BROWSER UI ===== -->
             <div class="titlebar">
                 <div class="traffic">
-                    <button class="r" id="tlClose" title="Close tab"></button>
-                    <button class="y" id="tlMin" title="Minimize"></button>
+                    <button class="r" id="tlClose" title="Close window"></button>
+                    <button class="y" id="tlMin" title="Close tab"></button>
                     <button class="g" id="tlMax" title="Fullscreen"></button>
                 </div>
                 <div class="tabs" id="tabs"></div>
@@ -1756,7 +1756,7 @@
                     page.className = "";
                     page.setAttribute("referrerpolicy", "no-referrer");
                     page.setAttribute("sandbox", "allow-scripts allow-same-origin allow-forms allow-popups");
-                    page.src = url; /* FIX: iframe src was never being set, so tabs opened via bookmarks/programmatically stayed blank */
+                    page.src = url;
                     contentEl.appendChild(page);
                     tab.iframe = page;
                     tab.history.push(url);
@@ -1764,7 +1764,6 @@
                 } else {
                     page = document.createElement("div");
                     page.className = "newtab";
-                    // New design: logo + search bar with classic SVG icon
                     page.innerHTML = `
                         <img class="nb-logo" src="asset/B-Browser-logo.png" alt="B-Browser" />
                         <div class="search-container">
@@ -1781,7 +1780,6 @@
                     tab.iframe = null;
                     tab.node = page;
 
-                    // Attach events for the search bar
                     var searchInput = page.querySelector("#newtab-search");
                     var searchBtn = page.querySelector("#newtab-search-btn");
                     if (searchInput) {
@@ -1793,7 +1791,6 @@
                                 if (url) go(url);
                             }
                         });
-                        // Also update placeholder on language change
                         searchInput.placeholder = i18n("address_placeholder");
                     }
                     if (searchBtn) {
@@ -1879,7 +1876,6 @@
                 var tab = findTab(state.activeId);
                 if (!tab) return;
                 if (!tab.iframe) {
-                    /* Currently on the new-tab page: promote it to an iframe tab */
                     if (tab.pageEl) tab.pageEl.remove();
                     var page = document.createElement("iframe");
                     page.setAttribute("referrerpolicy", "no-referrer");
@@ -2044,11 +2040,9 @@
                 if (TRANSLATIONS[lang]) {
                     currentLang = lang;
                     updateUI();
-                    // Update new tab search placeholders
                     document.querySelectorAll("#newtab-search").forEach(function(inp) {
                         inp.placeholder = i18n("address_placeholder");
                     });
-                    // Update tab titles that are "New tab"
                     state.tabs.forEach(function(tab) {
                         if (!tab.url || tab.url === "") {
                             tab.title = i18n("new_tab");
@@ -2061,14 +2055,25 @@
             /* ─── Event listeners ─── */
             $("addTab").onclick = function() { createTab(null); };
 
+            /* ── TRAFFIC LIGHT CONTROLS ── */
+            // RED: Close the entire browser window
             $("tlClose").onclick = function() {
-                if (state.tabs.length > 0) closeTab(state.activeId);
+                try {
+                    window.close();
+                } catch (e) {
+                    // If window.close() fails, fallback to closing the current tab
+                    if (state.tabs.length > 0) closeTab(state.activeId);
+                }
             };
 
+            // YELLOW/AMBER: Close the current tab (hide it)
             $("tlMin").onclick = function() {
-                if (document.fullscreenElement) document.exitFullscreen().catch(function() {});
+                if (state.tabs.length > 0) {
+                    closeTab(state.activeId);
+                }
             };
 
+            // GREEN: Toggle fullscreen
             $("tlMax").onclick = function() {
                 if (!document.fullscreenElement) {
                     document.documentElement.requestFullscreen().catch(function() {});
@@ -2175,7 +2180,6 @@
                     root.style.setProperty("--muted", "#6a6e77");
                     root.style.setProperty("--content-bg", "#ffffff");
                 } else {
-                    // system: reset to default dark
                     root.style.setProperty("--frame", "#0d0e10");
                     root.style.setProperty("--titlebar", "#17181c");
                     root.style.setProperty("--toolbar", "#1d1f24");
