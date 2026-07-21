@@ -1,0 +1,41 @@
+{
+  "name": "b-browser",
+  "productName": "B-Browser",
+  "version": "1.0.0",
+  "description": "B-Browser desktop app",
+  "main": "main.js",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --win"
+  },
+  "devDependencies": {
+    "electron": "^31.0.0",
+    "electron-builder": "^24.13.3"
+  },
+  "build": {
+    "appId": "com.bbrowser.app",
+    "productName": "B-Browser",
+    "files": [
+      "index.html",
+      "main.js",
+      "preload.js",
+      "assets/**/*"
+    ],
+    "win": {
+      "icon": "assets/icon.ico",
+      "target": [
+        { "target": "portable", "arch": ["x64"] },
+        { "target": "nsis", "arch": ["x64"] }
+      ]
+    },
+    "portable": {
+      "artifactName": "B-Browser-portable.exe"
+    },
+    "nsis": {
+      "artifactName": "B-Browser-Setup.exe",
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
+  }
+}
