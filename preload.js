@@ -5,4 +5,6 @@ contextBridge.exposeInMainWorld("electronAPI", {
   minimizeWindow: () => ipcRenderer.send("win:minimize"),
   toggleMaximizeWindow: () => ipcRenderer.send("win:toggle-maximize"),
   openExternal: (url) => ipcRenderer.send("open-external", url),
+  setAdblock: (enabled) => ipcRenderer.send('adblock:set', !!enabled),
+  checkForUpdates: () => ipcRenderer.send('check-for-updates')
 });
