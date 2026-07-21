@@ -2,7 +2,7 @@
   "name": "b-browser",
   "productName": "B-Browser",
   "version": "1.0.0",
-  "description": "B-Browser desktop app",
+  "description": "B-Browser desktop app - A modern Chromium-based browser with custom UI",
   "main": "main.js",
   "private": true,
   "scripts": {
@@ -35,7 +35,9 @@
     "nsis": {
       "artifactName": "B-Browser-Setup.exe",
       "oneClick": false,
-      "allowToChangeInstallationDirectory": true
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
     }
   }
 }
